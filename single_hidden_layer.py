@@ -10,7 +10,7 @@ import tensorflow as tf
 
 parser = argparse.ArgumentParser(description='Hello IceCube')
 parser.add_argument('--data_path',
-                    default='/opt/icecube_deep_learning/data',
+                    default='/opt/deep_learning/data',
                     help='Path to training and test data.')
 parser.add_argument('--epochs',
                     dest='epochs',
@@ -58,7 +58,7 @@ metrics_options = ['accuracy', 'auc', 'average_precision_at_k', 'false_negatives
                    'precision', 'precision_at_k', 'precision_at_thresholds', 'precision_at_top_k',
                    'recall', 'recall_at_k', 'recall_at_thresholds', 'recall_at_top_k', 'root_mean_squared_error',
                    'sensitivity_at_specificity', 'sparse_average_precision_at_k', 'sparse_precision_at_k',
-                   'specificity_at_sensitivity', 'true_negatives', 'true_negatives_ath_thresholds',
+                   'specificity_at_sensitivity', 'true_negatives', 'true_negatives_at_thresholds',
                    'true_positives', 'true_positives_at_thresholds']
 
 print(args.activation)
@@ -78,29 +78,21 @@ for m in args.metrics.split(','):
     else:        
         logging.warn('%s is not a valid metric.  Ignoring.' % m)
 
-tracks = pickle.load(open(os.path.join(args.data_path,'tracks.pkl')))
-cascades = pickle.load(open(os.path.join(args.data_path,'cascades.pkl')))
+tracks = pickle.load(open(os.path.join(args.data_path,'pev_starting_tracks.pkl')))
+cascades = pickle.load(open(os.path.join(args.data_path,'pev_cascades.pkl')))
 
 labeled_data = [(0,h) for h in cascades] + [(1,h) for h in tracks]
 random.shuffle(labeled_data)
 
 n_output_units = 2
 
-print(n_output_units)
-
-# Q1: How do I choose the number of units of the hidden layer?
-# Q2: What's the best activation function to use?
 input_layer = tf.keras.layers.Flatten(input_shape=(28,28))
 hidden_layer = tf.keras.layers.Dense(args.n_hidden_units, activation=args.activation)
-dropout_layer = tf.keras.layers.Dropout(0.2)
 output_layer = tf.keras.layers.Dense(n_output_units, activation='softmax')
 
-# Start with single hidden layer
-network = [input_layer, hidden_layer, dropout_layer, output_layer]
+network = [input_layer, hidden_layer, output_layer]
 model = tf.keras.models.Sequential(network)
 
-# Q3: What's the best optimizer?
-# Q4: What's the best loss function?
 model.compile(optimizer=args.optimizer,
               loss=args.loss,
               metrics=valid_metrics)

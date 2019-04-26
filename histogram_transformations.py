@@ -13,6 +13,7 @@ def generate(histogram, function = lambda x, y : y):
         if mean > 0:
             sigma = sqrt(mean)
             result['bin_values'][idx] = int(random.gauss(mean, sigma))
+    del result['_id']
     return result
 
 def generate_data(histogram,
@@ -31,6 +32,7 @@ def generate_data(histogram,
         labels.append(label_mapping[label])
         histograms.append(generate(histogram, function))
     return histograms, labels
+
 
 
 

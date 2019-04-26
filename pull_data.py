@@ -42,26 +42,26 @@ if __name__ == '__main__':
     histogram_name = 'PrimaryEnergy'
 
     same = lambda x,y: y
-    half = lambda x,y : 0.5 * x
-    linear = lambda x,y : y + 0.1*x
+    #half = lambda x,y : 0.5 * x
+    linear = lambda x,y : y + 0.5*x
 
     primary_energy = get_histogram(database_name, collection_names[0], 'PrimaryEnergy')
 
     transformations = {'same': same,
-                       'half': half,
+                       #'half': half,
                        'linear': linear}
     label_mapping = {l: v for v, l in enumerate(transformations.keys())}
     
-    histograms, labels = generate_data(primary_energy, transformations, label_mapping)
+    histograms, labels = generate_data(primary_energy, transformations, label_mapping, 10000)
     training_data = {'histograms': histograms, 'labels': labels}
     
-    histograms, labels = generate_data(primary_energy, transformations, label_mapping)
+    histograms, labels = generate_data(primary_energy, transformations, label_mapping, 10000)
     test_data = {'histograms': histograms, 'labels': labels}
     
     data = {'training_data' : training_data,
             'test_data' : test_data}
 
-    pickle.dump(data, open('bootcamp.pkl', 'w'))
+    pickle.dump(data, open('data/bootcamp.pkl', 'w'))
         
 #    for collection_name in collection_names:
 #        primary_energy = get_histogram(database_name, collection_name, histogram_name)

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# docker run -v /home/olivas/icecube_deep_learning:/opt/icecube_deep_learning -u $(id -u):$(id -g) -it tensorflow/tensorflow /opt/icecube_deep_learning/single_hidden_layer.py
+
 import os
 import argparse
 import logging
@@ -10,7 +12,7 @@ import tensorflow as tf
 
 parser = argparse.ArgumentParser(description='Hello IceCube')
 parser.add_argument('--data_path',
-                    default='/opt/deep_learning/data',
+                    default='/opt/icecube_deep_learning/data',
                     help='Path to training and test data.')
 parser.add_argument('--epochs',
                     dest='epochs',
